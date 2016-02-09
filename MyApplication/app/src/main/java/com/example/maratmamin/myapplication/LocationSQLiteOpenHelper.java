@@ -46,11 +46,6 @@ public class LocationSQLiteOpenHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
      db.execSQL(CREATE_LOCATION_LIST_TABLE);
-        addItem(db, "Central Park", "Inner Manhattan", "Midtown");
-        addItem(db, "Bronx Zoo", "Sexy Pandas", "Bronx");
-        addItem(db, "Botanical Gardens", "Flowery", "Brooklyn");
-        addItem(db, "Madison Square Garden", "Knicks and Rangers", "Manhattan");
-        addItem(db, "Grand Central", "Crossroad of the World", "42nd Street");
     }
 
     @Override
@@ -59,7 +54,7 @@ public class LocationSQLiteOpenHelper extends SQLiteOpenHelper {
         this.onCreate(db);
     }
 
-    public long addItem(SQLiteDatabase db, String name, String address, String environment){
+    public long addItem(String name, String address, String environment){
         ContentValues values = new ContentValues();
         values.put(COL_LOCATION_NAME, name);
         values.put(COL_LOCATION_ADDRESS, address);
@@ -67,6 +62,7 @@ public class LocationSQLiteOpenHelper extends SQLiteOpenHelper {
 
         //pass the database as a parameter instead of "getting" a new one
 
+        SQLiteDatabase db = this.getWritableDatabase();
         long returnId = db.insert(LOCATION_LIST_TABLE_NAME, null, values);
         db.close();
         return returnId;
