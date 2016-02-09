@@ -20,15 +20,19 @@ public class LocationSQLiteOpenHelper extends SQLiteOpenHelper {
     public static final String COL_LOCATION_NAME="LOCATION_NAME";
     public static final String COL_LOCATION_ADDRESS="LOCATION_ADDRESS";
     public static final String COL_LOCATION_NEIGHBORHOOD="LOCATION_NEIGHBORHOOD";
+    public static final String COL_FAVORITES="LOCATION_FAVORITES";
+    public static final String COL_IMAGES="LOCATION_IMAGES";
 
 
-    public static final String [] LOCATION_COLUMNS = {COL_ID, COL_LOCATION_NAME, COL_LOCATION_ADDRESS, COL_LOCATION_NEIGHBORHOOD };
+    public static final String [] LOCATION_COLUMNS = {COL_ID, COL_LOCATION_NAME, COL_LOCATION_ADDRESS, COL_LOCATION_NEIGHBORHOOD, COL_FAVORITES, COL_IMAGES };
 
     private static final String CREATE_LOCATION_LIST_TABLE = "CREATE TABLE " + LOCATION_LIST_TABLE_NAME +
             " ( " +
             COL_ID + " INTEGER PRIMARY KEY, " + COL_LOCATION_NAME + " TEXT, " +
             COL_LOCATION_ADDRESS + " TEXT, "
-            + COL_LOCATION_NEIGHBORHOOD + " TEXT )";
+            + COL_LOCATION_NEIGHBORHOOD + " TEXT, "
+    + COL_FAVORITES + " INTEGER " +
+    COL_IMAGES + " BLOB )";
 
     private static LocationSQLiteOpenHelper instance;
 
@@ -67,6 +71,8 @@ public class LocationSQLiteOpenHelper extends SQLiteOpenHelper {
         db.close();
         return returnId;
     }
+
+    public boolean checkFavorites()
 
     public Cursor getLocationList () {
         SQLiteDatabase db = this.getReadableDatabase();

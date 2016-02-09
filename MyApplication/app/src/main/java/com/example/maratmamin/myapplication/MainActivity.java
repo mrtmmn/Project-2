@@ -38,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
 
         mSearchListView = (ListView) findViewById(R.id.location_list_view);
         mHelper = LocationSQLiteOpenHelper.getInstance(this);
+        mHelper.addItem("Central Park", "BLABLBBL", "Midtown");
+        mHelper.addItem("BUBUBUB", "ALALALALA", "CKCKCKCKCK");
 
         cursor = mHelper.getLocationList();
 
