@@ -1,5 +1,6 @@
 package com.example.maratmamin.myapplication;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -9,9 +10,9 @@ import android.database.sqlite.SQLiteOpenHelper;
  * Created by maratmamin on 2/4/16.
  */
 public class LocationSQLiteOpenHelper extends SQLiteOpenHelper {
-    private static final String TAG = LocationSQLiteOpenHelper.class.getCanonicalName();
+//    private static final String TAG = LocationSQLiteOpenHelper.class.getCanonicalName();
 
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     public static final String DATABASE_NAME = "LOCATION_DB";
     public static final String LOCATION_LIST_TABLE_NAME = "LOCATION_LIST";
 
@@ -20,13 +21,14 @@ public class LocationSQLiteOpenHelper extends SQLiteOpenHelper {
     public static final String COL_LOCATION_ADDRESS="LOCATION_ADDRESS";
     public static final String COL_LOCATION_NEIGHBORHOOD="LOCATION_NEIGHBORHOOD";
 
+
     public static final String [] LOCATION_COLUMNS = {COL_ID, COL_LOCATION_NAME, COL_LOCATION_ADDRESS, COL_LOCATION_NEIGHBORHOOD };
 
-    private static final String CREATE_LOCATION_LIST_TABLE = "CREATE TABLE" + LOCATION_LIST_TABLE_NAME +
-            "(" +
-            COL_ID + "INTEGER PRIMARY KEY," + COL_LOCATION_NAME + "TEXT" +
-            COL_LOCATION_ADDRESS + "TEXT"
-            + COL_LOCATION_NEIGHBORHOOD + "TEXT" + ")";
+    private static final String CREATE_LOCATION_LIST_TABLE = "CREATE TABLE " + LOCATION_LIST_TABLE_NAME +
+            " ( " +
+            COL_ID + " INTEGER PRIMARY KEY, " + COL_LOCATION_NAME + " TEXT, " +
+            COL_LOCATION_ADDRESS + " TEXT, "
+            + COL_LOCATION_NEIGHBORHOOD + " TEXT )";
 
     private static LocationSQLiteOpenHelper instance;
 
@@ -44,12 +46,30 @@ public class LocationSQLiteOpenHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
      db.execSQL(CREATE_LOCATION_LIST_TABLE);
+        addItem(db, "Central Park", "Inner Manhattan", "Midtown");
+        addItem(db, "Bronx Zoo", "Sexy Pandas", "Bronx");
+        addItem(db, "Botanical Gardens", "Flowery", "Brooklyn");
+        addItem(db, "Madison Square Garden", "Knicks and Rangers", "Manhattan");
+        addItem(db, "Grand Central", "Crossroad of the World", "42nd Street");
     }
 
     @Override
     public void onUpgrade (SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS" + LOCATION_LIST_TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + LOCATION_LIST_TABLE_NAME);
         this.onCreate(db);
+    }
+
+    public long addItem(SQLiteDatabase db, String name, String address, String environment){
+        ContentValues values = new ContentValues();
+        values.put(COL_LOCATION_NAME, name);
+        values.put(COL_LOCATION_ADDRESS, address);
+        values.put(COL_LOCATION_NEIGHBORHOOD, environment);
+
+        //pass the database as a parameter instead of "getting" a new one
+
+        long returnId = db.insert(LOCATION_LIST_TABLE_NAME, null, values);
+        db.close();
+        return returnId;
     }
 
     public Cursor getLocationList () {
@@ -67,12 +87,21 @@ public class LocationSQLiteOpenHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
+    public int deleteItem(int id){
+        SQLiteDatabase db = getWritableDatabase();
+        int deleteNum = db.delete(LOCATION_LIST_TABLE_NAME,
+                COL_ID + " = ?",
+                new String[]{String.valueOf(id)});
+        db.close();
+        return deleteNum;
+    }
+
     public Cursor searchLocationList (String query) {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(LOCATION_LIST_TABLE_NAME,
                 LOCATION_COLUMNS,
-                COL_LOCATION_NAME + "LIKE ? OR" + COL_LOCATION_ADDRESS +"LIKE ? OR" + COL_LOCATION_NEIGHBORHOOD +"LIKE ? OR",
+                COL_LOCATION_NAME + "LIKE ? OR" + COL_LOCATION_ADDRESS + "LIKE ? OR" + COL_LOCATION_NEIGHBORHOOD + "LIKE ? OR",
                 new String []{"%" + query + "%"},
                 null,
                 null,
