@@ -33,7 +33,7 @@ public class DetailActivity extends AppCompatActivity {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                    if (favoriteButton.isChecked()) {
 //                       favoriteButton.setChecked(true);
-                      mHelper.updateFavorite(id, 1);
+                      mHelper.updateAddFavorite(id, 1);
                     }
                 }
             });

@@ -85,7 +85,7 @@ public class LocationSQLiteOpenHelper extends SQLiteOpenHelper {
         db.insert(LOCATION_LIST_TABLE_NAME, null, values);
     }
 
-    public boolean updateaddFavorite(int id, int favorite) {
+    public boolean updateAddFavorite(int id, int favorite) {
 
         SQLiteDatabase db = this.getWritableDatabase();
 

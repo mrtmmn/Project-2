@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
         mSearchListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(MainActivity.this, ScrollingActivity.class);
+                Intent intent = new Intent(MainActivity.this, DetailScrollingActivity.class);
                 cursorAdapter.getCursor().moveToPosition(position);
                 //use cursorAdapter.getCursor() so that adapter always knows what its looking at
                 intent.putExtra("id", cursor.getInt(cursor.getColumnIndex(LocationSQLiteOpenHelper.COL_ID)));
