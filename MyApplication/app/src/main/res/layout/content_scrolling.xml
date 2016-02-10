@@ -8,11 +8,32 @@
     tools:context="com.example.maratmamin.myapplication.ScrollingActivity"
     tools:showIn="@layout/activity_scrolling">
 
-    <TextView
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin"
         android:id="@+id/cool_textview"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:id="@+id/nice_tv"
+            android:layout_below="@id/cool_textview"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:id="@+id/good_tv"
+            android:layout_below="@id/nice_tv"/>
+
+    </RelativeLayout>
+
     <!--<CheckBox-->
         <!--android:layout_width="wrap_content"-->
         <!--android:layout_height="wrap_content"-->

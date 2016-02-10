@@ -20,46 +20,48 @@ public class ScrollingActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+
 
         mHelper = LocationSQLiteOpenHelper.getInstance(ScrollingActivity.this);
 
         final int id = getIntent().getIntExtra("id", -1);
 
         if (id >= 0) {
-            String [] description = LocationSQLiteOpenHelper.getInstance(ScrollingActivity.this).getDescriptionById(id);
+            String [] description = mHelper.getDescriptionById(id);
+            int details = mHelper.checkFavoriteById(id);
             //getFavoritedById
 //            String locationName = description[0];
 
 //            ImageView imageView = (ImageView) findViewById(R.id.image_view);
 //            imageView.setImageResource(getDrawableValue(locationName));
 
-//            final CheckBox favoriteButton = (CheckBox) findViewById(R.id.fav_button);
-//            favoriteButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//                @Override
-//                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                    if (favoriteButton.isChecked()) {
-//                       favoriteButton.setChecked(true);
-//                        mHelper.updateFavorite(id, 1);
-//                    }
-//                }
-//            });
+            final CheckBox favoriteButton = (CheckBox) findViewById(R.id.fav_button);
+
+            if (details == 1) {
+
+            favoriteButton.setChecked(true); }
+
+            favoriteButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (favoriteButton.isChecked()) {
+                       favoriteButton.setChecked(true);
+                        mHelper.updateaddFavorite(id, 1);
+                    }
+                    else if (!favoriteButton.isChecked()){
+
+                    }
+                }
+            });
 
             TextView textView = (TextView) findViewById(R.id.cool_textview);
             textView.setText(description[0]);
 //
-//            TextView textView2 = (TextView) findViewById(R.id.price);
-//            textView2.setText(description[1]);
+            TextView textView2 = (TextView) findViewById(R.id.nice_tv);
+            textView2.setText(description[1]);
 //
-//            TextView textView3 = (TextView) findViewById(R.id.type);
-//            textView3.setText(description[2]);
+            TextView textView3 = (TextView) findViewById(R.id.good_tv);
+            textView3.setText(description[2]);
 
         }
 
