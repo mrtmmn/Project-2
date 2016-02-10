@@ -38,8 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
         mSearchListView = (ListView) findViewById(R.id.location_list_view);
         mHelper = LocationSQLiteOpenHelper.getInstance(this);
-        mHelper.addItem("Central Park", "BLABLBBL", "Midtown");
-        mHelper.addItem("BUBUBUB", "ALALALALA", "CKCKCKCKCK");
+
 
         cursor = mHelper.getLocationList();
 
@@ -68,8 +67,9 @@ public class MainActivity extends AppCompatActivity {
         mSearchListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(MainActivity.this, DetailActivity.class);
-                cursor.moveToPosition(position);
+                Intent intent = new Intent(MainActivity.this, ScrollingActivity.class);
+                cursorAdapter.getCursor().moveToPosition(position);
+                //use cursorAdapter.getCursor() so that adapter always knows what its looking at
                 intent.putExtra("id", cursor.getInt(cursor.getColumnIndex(LocationSQLiteOpenHelper.COL_ID)));
                 startActivity(intent);
             }
@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
             Cursor cursor = mHelper.searchLocationList(query);
-            cursorAdapter.changeCursor(cursor);
+            cursorAdapter.swapCursor(cursor);
             cursorAdapter.notifyDataSetChanged();
         }
     }

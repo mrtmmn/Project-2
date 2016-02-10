@@ -12,7 +12,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class LocationSQLiteOpenHelper extends SQLiteOpenHelper {
 //    private static final String TAG = LocationSQLiteOpenHelper.class.getCanonicalName();
 
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 4;
     public static final String DATABASE_NAME = "LOCATION_DB";
     public static final String LOCATION_LIST_TABLE_NAME = "LOCATION_LIST";
 
@@ -20,15 +20,16 @@ public class LocationSQLiteOpenHelper extends SQLiteOpenHelper {
     public static final String COL_LOCATION_NAME="LOCATION_NAME";
     public static final String COL_LOCATION_ADDRESS="LOCATION_ADDRESS";
     public static final String COL_LOCATION_NEIGHBORHOOD="LOCATION_NEIGHBORHOOD";
+    public static final String COL_LOCATION_FAVORITES="LOCATION_FAVORITES";
 
 
-    public static final String [] LOCATION_COLUMNS = {COL_ID, COL_LOCATION_NAME, COL_LOCATION_ADDRESS, COL_LOCATION_NEIGHBORHOOD };
+    public static final String [] LOCATION_COLUMNS = {COL_ID, COL_LOCATION_NAME, COL_LOCATION_ADDRESS, COL_LOCATION_NEIGHBORHOOD, COL_LOCATION_FAVORITES};
 
     private static final String CREATE_LOCATION_LIST_TABLE = "CREATE TABLE " + LOCATION_LIST_TABLE_NAME +
             " ( " +
             COL_ID + " INTEGER PRIMARY KEY, " + COL_LOCATION_NAME + " TEXT, " +
             COL_LOCATION_ADDRESS + " TEXT, "
-            + COL_LOCATION_NEIGHBORHOOD + " TEXT )";
+            + COL_LOCATION_NEIGHBORHOOD + " TEXT, " + COL_LOCATION_FAVORITES + " INTEGER ) ";
 
     private static LocationSQLiteOpenHelper instance;
 
@@ -46,6 +47,8 @@ public class LocationSQLiteOpenHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
      db.execSQL(CREATE_LOCATION_LIST_TABLE);
+        addItemToDataBase(db, "Central Park", "BLABLBBL", "Midtown", 0);
+        addItemToDataBase(db, "BUBUBUB", "ALALALALA", "CKCKCKCKCK", 0);
     }
 
     @Override
@@ -54,18 +57,46 @@ public class LocationSQLiteOpenHelper extends SQLiteOpenHelper {
         this.onCreate(db);
     }
 
-    public long addItem(String name, String address, String environment){
+//    public long addItem(String name, String address, String environment, String favorite){
+//        ContentValues values = new ContentValues();
+//        values.put(COL_LOCATION_NAME, name);
+//        values.put(COL_LOCATION_ADDRESS, address);
+//        values.put(COL_LOCATION_NEIGHBORHOOD, environment);
+//        values.put(COL_LOCATION_FAVORITES, favorite);
+//
+//        //pass the database as a parameter instead of "getting" a new one
+//
+//        SQLiteDatabase db = this.getWritableDatabase();
+//        long returnId = db.insert(LOCATION_LIST_TABLE_NAME, null, values);
+//        db.close();
+//        return returnId;
+//    }
+
+    private void addItemToDataBase (SQLiteDatabase db, String name, String address, String environment, int favorite) {
         ContentValues values = new ContentValues();
         values.put(COL_LOCATION_NAME, name);
         values.put(COL_LOCATION_ADDRESS, address);
         values.put(COL_LOCATION_NEIGHBORHOOD, environment);
+        values.put(COL_LOCATION_FAVORITES, favorite);
 
-        //pass the database as a parameter instead of "getting" a new one
+        db.insert(LOCATION_LIST_TABLE_NAME, null, values);
+    }
+
+    public boolean updateFavorite(int id, int favorite) {
 
         SQLiteDatabase db = this.getWritableDatabase();
-        long returnId = db.insert(LOCATION_LIST_TABLE_NAME, null, values);
-        db.close();
-        return returnId;
+
+        ContentValues values = new ContentValues();
+//        values.put(COL_ID, id);
+//        values.put(COL_LOCATION_NAME, name);
+//        values.put(COL_LOCATION_ADDRESS, address);
+//        values.put(COL_LOCATION_NEIGHBORHOOD, environment);
+        values.put(COL_LOCATION_FAVORITES, favorite);
+
+        db.update(LOCATION_LIST_TABLE_NAME, values, COL_ID + " = ? ", new String [] {String.valueOf(id)});
+        //where clause = column name =like ?
+
+        return true;
     }
 
     public Cursor getLocationList () {
@@ -83,21 +114,21 @@ public class LocationSQLiteOpenHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
-    public int deleteItem(int id){
-        SQLiteDatabase db = getWritableDatabase();
-        int deleteNum = db.delete(LOCATION_LIST_TABLE_NAME,
-                COL_ID + " = ?",
-                new String[]{String.valueOf(id)});
-        db.close();
-        return deleteNum;
-    }
+//    public int deleteItem(int id){
+//        SQLiteDatabase db = getWritableDatabase();
+//        int deleteNum = db.delete(LOCATION_LIST_TABLE_NAME,
+//                COL_ID + " = ?",
+//                new String[]{String.valueOf(id)});
+//        db.close();
+//        return deleteNum;
+//    }
 
     public Cursor searchLocationList (String query) {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(LOCATION_LIST_TABLE_NAME,
                 LOCATION_COLUMNS,
-                COL_LOCATION_NAME + "LIKE ? OR" + COL_LOCATION_ADDRESS + "LIKE ? OR" + COL_LOCATION_NEIGHBORHOOD + "LIKE ? OR",
+                COL_LOCATION_NAME + " LIKE ? OR " + COL_LOCATION_ADDRESS + " LIKE ? OR " + COL_LOCATION_NEIGHBORHOOD + " LIKE ? ",
                 new String []{"%" + query + "%"},
                 null,
                 null,
@@ -111,8 +142,8 @@ public class LocationSQLiteOpenHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(LOCATION_LIST_TABLE_NAME,
-                new String[] {COL_LOCATION_NAME, COL_LOCATION_ADDRESS, COL_LOCATION_NEIGHBORHOOD},
-                COL_ID+" = ?",
+                new String[] {COL_LOCATION_NAME, COL_LOCATION_ADDRESS, COL_LOCATION_NEIGHBORHOOD, COL_LOCATION_FAVORITES},
+                COL_ID + " = ?",
                 new String[]{String.valueOf(id)},
                 null,
                 null,
@@ -125,6 +156,7 @@ public class LocationSQLiteOpenHelper extends SQLiteOpenHelper {
                 cursor.getString(cursor.getColumnIndex(COL_LOCATION_NAME)),
                 cursor.getString(cursor.getColumnIndex(COL_LOCATION_ADDRESS)),
                 cursor.getString(cursor.getColumnIndex(COL_LOCATION_NEIGHBORHOOD)),
+                cursor.getString(cursor.getColumnIndex(COL_LOCATION_FAVORITES)),
         };
 
                 return detailsArray;

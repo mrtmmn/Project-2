@@ -2,24 +2,41 @@ package com.example.maratmamin.myapplication;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 public class DetailActivity extends AppCompatActivity {
+    private LocationSQLiteOpenHelper mHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        int id = getIntent().getIntExtra("id", -1);
+        mHelper = LocationSQLiteOpenHelper.getInstance(DetailActivity.this);
+
+        final int id = getIntent().getIntExtra("id", -1);
 
         if (id >= 0) {
             String [] description = LocationSQLiteOpenHelper.getInstance(DetailActivity.this).getDescriptionById(id);
+            //getFavoritedById
 //            String locationName = description[0];
 
 //            ImageView imageView = (ImageView) findViewById(R.id.image_view);
 //            imageView.setImageResource(getDrawableValue(locationName));
+
+            final CheckBox favoriteButton = (CheckBox) findViewById(R.id.favorite_button);
+            favoriteButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                   if (favoriteButton.isChecked()) {
+//                       favoriteButton.setChecked(true);
+                      mHelper.updateFavorite(id, 1);
+                    }
+                }
+            });
 
             TextView textView = (TextView) findViewById(R.id.description);
             textView.setText(description[0]);
