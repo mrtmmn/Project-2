@@ -54,14 +54,14 @@ public class DetailScrollingActivity extends AppCompatActivity {
                 }
             });
 
-//            TextView textView = (TextView) findViewById(R.id.cool_textview);
-//            textView.setText(description[0]);
-//
-//            TextView textView2 = (TextView) findViewById(R.id.nice_tv);
-//            textView2.setText(description[1]);
-////
-//            TextView textView3 = (TextView) findViewById(R.id.good_tv);
-//            textView3.setText(description[2]);
+            TextView textView = (TextView) findViewById(R.id.cool_textview);
+            textView.setText(description[0]);
+
+            TextView textView2 = (TextView) findViewById(R.id.nice_tv);
+            textView2.setText(description[1]);
+
+            TextView textView3 = (TextView) findViewById(R.id.good_tv);
+            textView3.setText(description[2]);
 
         }
 

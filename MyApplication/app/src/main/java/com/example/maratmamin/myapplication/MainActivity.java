@@ -51,11 +51,11 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void bindView(View view, Context context, Cursor cursor) {
-//                ImageView imageView = (ImageView) view.findViewById(R.id.location_image_view);
+                ImageView imageView = (ImageView) view.findViewById(R.id.location_image_view);
                 TextView textView = (TextView) view.findViewById(R.id.location_name_text_view);
                 String locationName = cursor.getString(cursor.getColumnIndex("LOCATION_NAME"));
 
-//                imageView.setImageResource(getDrawableValue(locationName));
+                imageView.setImageResource(getDrawableValue(locationName));
                 textView.setText((locationName));
             }
         };
@@ -103,24 +103,24 @@ public class MainActivity extends AppCompatActivity {
             cursorAdapter.notifyDataSetChanged();
         }
     }
-}
+
 //      NOW JUST TO FIGURE OUT HOW TO STORE THE PICTURE
 
-//    private int getDrawableValue(String icon) {
-//        switch (icon) {
-//            case "Central Park":
-//                return R.drawable.central_park;
-//            case "Bronx Zoo":
-//                return R.drawable.bronx_zoo;
-//            case "Botanical Gardens":
-//                return R.drawable.botanical_gardens;
-//            case "Madison Square Garden":
-//                return R.drawable.madison_square_garden;
-//            case "Grand Central":
-//                return R.drawable.grand_central;
-//            default:
-//                return 0;
-//        }
-//    }
-//}
+    private int getDrawableValue(String icon) {
+        switch (icon) {
+            case "Central Park":
+                return R.drawable.central_park;
+            case "Bronx Zoo":
+                return R.drawable.bronx_zoo;
+            case "Botanical Gardens":
+                return R.drawable.botanical_gardens;
+            case "Madison Square Garden":
+                return R.drawable.madison_square_garden;
+            case "Grand Central":
+                return R.drawable.grand_central;
+            default:
+                return 0;
+        }
+    }
+}
 

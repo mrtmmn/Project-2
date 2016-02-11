@@ -50,7 +50,7 @@ public class LocationSQLiteOpenHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
      db.execSQL(CREATE_LOCATION_LIST_TABLE);
         addItemToDataBase(db, "Central Park", "BLABLBBL", "Midtown", 0, "central_park");
-        addItemToDataBase(db, "BUBUBUB", "ALALALALA", "CKCKCKCKCK", 0, "bronx_zoo");
+        addItemToDataBase(db, "Bronx Zoo", "ALALALALA", "CKCKCKCKCK", 0, "bronx_zoo");
     }
 
     @Override

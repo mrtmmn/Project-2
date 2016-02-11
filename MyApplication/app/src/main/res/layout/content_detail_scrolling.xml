@@ -7,11 +7,26 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.maratmamin.myapplication.DetailScrollingActivity"
     tools:showIn="@layout/activity_detail_scrolling">
-
+<RelativeLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin"
-        android:text="@string/large_text" />
+        android:id="@+id/cool_textview"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:id="@+id/nice_tv"
+        android:layout_below="@+id/cool_textview"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:id="@+id/good_tv"
+        android:layout_below="@+id/nice_tv"/>
+</RelativeLayout>
 
 </android.support.v4.widget.NestedScrollView>
