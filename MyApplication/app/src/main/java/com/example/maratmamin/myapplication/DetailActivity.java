@@ -2,6 +2,7 @@ package com.example.maratmamin.myapplication;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -18,6 +19,8 @@ public class DetailActivity extends AppCompatActivity {
         mHelper = LocationSQLiteOpenHelper.getInstance(DetailActivity.this);
 
         final int id = getIntent().getIntExtra("id", -1);
+
+        Log.d("DetailActivity","ID passed in: "+id);
 
         if (id >= 0) {
             String [] description = LocationSQLiteOpenHelper.getInstance(DetailActivity.this).getDescriptionById(id);

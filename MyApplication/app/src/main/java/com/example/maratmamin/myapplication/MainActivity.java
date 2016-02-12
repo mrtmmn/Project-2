@@ -30,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
     private ListView mSearchListView;
     private Button mButton;
     private LocationSQLiteOpenHelper mHelper;
-    private Cursor cursor;
     private CursorAdapter cursorAdapter;
     private boolean mIsDisplayingFavorites = false;
     @Override
@@ -43,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         mHelper = LocationSQLiteOpenHelper.getInstance(this);
 
 
-        cursor = mHelper.getLocationList();
+        Cursor cursor = mHelper.getLocationList();
 
         cursorAdapter = new CursorAdapter(MainActivity.this, cursor, 0) {
 
@@ -95,8 +94,8 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(MainActivity.this, DetailScrollingActivity.class);
                 cursorAdapter.getCursor().moveToPosition(position);
-                //use cursorAdapter.getCursor() so that adapter always knows what its looking at
-                intent.putExtra("id", cursor.getInt(cursor.getColumnIndex(LocationSQLiteOpenHelper.COL_ID)));
+                //you need to make sure that you have a new cursor not reference the old on in favorites
+                intent.putExtra("id", cursorAdapter.getCursor().getInt(cursorAdapter.getCursor().getColumnIndex(LocationSQLiteOpenHelper.COL_ID)));
                 startActivity(intent);
             }
         });

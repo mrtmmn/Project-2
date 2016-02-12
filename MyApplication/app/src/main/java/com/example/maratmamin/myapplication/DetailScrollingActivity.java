@@ -5,6 +5,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -20,10 +21,12 @@ public class DetailScrollingActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
         mHelper = LocationSQLiteOpenHelper.getInstance(DetailScrollingActivity.this);
 
         final int id = getIntent().getIntExtra("id", -1);
+
+        Log.d("DetailScrollingActivity", "ID passed in: " + id);
+
 
         if (id >= 0) {
             String[] description = mHelper.getDescriptionById(id);
@@ -33,6 +36,8 @@ public class DetailScrollingActivity extends AppCompatActivity {
 
 //            ImageView imageView = (ImageView) findViewById(R.id.image_view);
 //            imageView.setImageResource(getDrawableValue(locationName));
+
+            getSupportActionBar().setTitle(description[0]);
 
             final CheckBox favoriteButton = (CheckBox) findViewById(R.id.fav_button);
 
