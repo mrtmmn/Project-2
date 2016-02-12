@@ -14,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -27,16 +28,18 @@ import org.w3c.dom.Text;
 public class MainActivity extends AppCompatActivity {
 
     private ListView mSearchListView;
+    private Button mButton;
     private LocationSQLiteOpenHelper mHelper;
     private Cursor cursor;
     private CursorAdapter cursorAdapter;
-
+    private boolean mIsDisplayingFavorites = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         mSearchListView = (ListView) findViewById(R.id.location_list_view);
+        mButton = (Button) findViewById(R.id.button);
         mHelper = LocationSQLiteOpenHelper.getInstance(this);
 
 
@@ -60,6 +63,29 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
+        mButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mIsDisplayingFavorites) {
+                    Cursor cursor = mHelper.getLocationList();
+                    cursorAdapter.swapCursor(cursor);
+//                    cursorAdapter.notifyDataSetChanged();
+                    mIsDisplayingFavorites = false;
+                    mButton.setText("GO TO FAVORITES");
+                } else {
+                    Cursor cursor = mHelper.getFavorites();
+
+                    if (cursor.getCount() > 0) {
+                        cursorAdapter.swapCursor(cursor);
+//                        cursorAdapter.notifyDataSetChanged();
+                        mIsDisplayingFavorites = true;
+                        mButton.setText("BACK");
+                    }
+                }
+
+            }
+        });
+
         mSearchListView.setAdapter(cursorAdapter);
 
       handleIntent(getIntent());
@@ -74,6 +100,17 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mIsDisplayingFavorites) {
+            Cursor cursor = mHelper.getFavorites();
+            cursorAdapter.swapCursor(cursor);
+        }
     }
 
     @Override

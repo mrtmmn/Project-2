@@ -42,14 +42,16 @@ public class LocationSQLiteOpenHelper extends SQLiteOpenHelper {
         return instance;
     }
 
+    Context mContext;
     private LocationSQLiteOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        mContext = context;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
      db.execSQL(CREATE_LOCATION_LIST_TABLE);
-        addItemToDataBase(db, "Central Park", "BLABLBBL", "Midtown", 0, "central_park");
+        addItemToDataBase(db, "Central Park", mContext.getResources().getString(R.string.string), "Midtown", 0, "central_park");
         addItemToDataBase(db, "Bronx Zoo", "ALALALALA", "CKCKCKCKCK", 0, "bronx_zoo");
     }
 
@@ -112,6 +114,20 @@ public class LocationSQLiteOpenHelper extends SQLiteOpenHelper {
         db.update(LOCATION_LIST_TABLE_NAME, values, COL_ID + " = ? ", new String []{String.valueOf(id)});
 
         return true;
+    }
+
+    public Cursor getFavorites() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(LOCATION_LIST_TABLE_NAME,
+                LOCATION_COLUMNS,
+                COL_LOCATION_FAVORITES + " LIKE 1 ",
+                null,
+                null,
+                null,
+                null,
+                null);
+
+        return cursor;
     }
 
     public Cursor getLocationList () {
