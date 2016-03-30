@@ -9,4 +9,17 @@
         app:showAsAction="collapseActionView|ifRoom"
         app:actionViewClass="android.support.v7.widget.SearchView" />
 
+    <item
+        android:id="@+id/home"
+        android:icon="@android:drawable/ic_menu_close_clear_cancel"
+        app:showAsAction="never"
+        android:title="Home" />
+
+    <item
+        android:id="@+id/favorites"
+        android:icon="@drawable/favorite_full"
+        app:showAsAction="ifRoom"
+        android:title="Favorites" />
+
+
 </menu>
